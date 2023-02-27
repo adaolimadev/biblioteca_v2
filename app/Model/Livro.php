@@ -12,7 +12,7 @@ class Livro extends Model
     private $ano;
     private $disponivel;
 
-    public function __construct($titulo = null, $autor= null, $editora=null, $genero=null, $ano=null,$disponivel = 1){
+    public function __construct($titulo = null, $autor= null, $editora=null, $genero=null, $ano=null,$disponivel = null){
         $this->setTitulo($titulo);
         $this->setAutor($autor);
         $this->setEditora($editora);

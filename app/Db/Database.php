@@ -45,7 +45,7 @@ class Database{
         {
             $statement = $this->connection->prepare($query);
             $statement->execute($params);
-            Log::createLog('Query executada com sucesso!','info');
+            Log::createLog('Query -> '.$query.' <- executada com sucesso!','info');
             return $statement; 
         }
         catch(PDOException $e)
@@ -62,7 +62,6 @@ class Database{
             $campos = array_keys($valores);
             $binds = array_pad([], count($campos), '?');
             $query = 'INSERT INTO ' . $this->table. ' ('.implode(',',$campos).') values ('.implode(',',$binds).')';
-            Log::createLog('query: '.$query,'info');
             $this-> execute($query,array_values($valores));
             Log::createLog('Inserção executada com sucesso!','info');
             return $this->connection->lastInsertId();
@@ -89,12 +88,37 @@ class Database{
             $st = $this->execute($query);
             $st->setFetchMode( PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $this->entity );
 
-            Log::createLog('Select executada com sucesso!','info');
+            Log::createLog('SELECT executada com sucesso!','info');
             return $st;
         } catch (PDOException $e) {
             Log::createLog('Erro no select: '.$e->getMessage(),'error');
             die('Erro inesperado, contate o Administrador do Sistema!');
         }
-    } 
+    }
+    
+    public function delete($where)
+    {
+        try{
+        $query = 'DELETE FROM '.$this->table.' WHERE '.$where;
+
+        $this->execute($query);
+        Log::createLog('DELETE executado com sucesso!','info');
+        return true;
+        }catch (PDOException $e) {
+            Log::createLog('Erro no delete: '.$e->getMessage(),'error');
+            die('Erro inesperado, contate o Administrador do Sistema!');
+        }
+    }
+
+    public function update($where, $values)
+    {
+        $fields = array_keys($values);
+
+        $query = 'UPDATE '.$this->table. ' SET '.implode('=?, ',$fields).'=? WHERE '.$where. ';';
+        
+        $this->execute($query, array_values($values));
+        Log::createLog('UPDATE executado com sucesso!','info');
+        return true;
+    }
 
 }

@@ -2,13 +2,33 @@
 <?php 
 
     use App\Db\LivroDao;
-    use App\Model\Livro;
-
+    
     $livroDao = new LivroDao('livros','\\App\\Model\\Livro');
 
     $livros = $livroDao->listarLivros(null,null,null,'*');
 
-    echo '<pre>'; print_r($livros); echo '</pre>'; exit;
+    $resultados = '';
+
+    foreach($livros as $livro){
+        $resultados .='<tr>
+                        <td>'.$livro->getId_livro().'</td>
+                        <td>'.$livro->getTitulo().'</td>
+                        <td>'.$livro->getAutor().'</td>
+                        <td>'.$livro->getEditora().'</td>
+                        <td>'.$livro->getGenero().'</td>
+                        <td>'.$livro->getAno().'</td>
+                        <td>'.($livro->getDisponivel()==1 ? 'Disponível': 'Indisponível').'</td>
+                        <td>
+                        <a href = "edit_livro.php?id_livro='.$livro->getId_livro().'">
+                        <button type="button" class="btn btn-primary">Editar</button>
+                        </a> 
+                        <a href = "del_livro.php?id_livro='.$livro->getId_livro().'">
+                        <button type="button" class="btn btn-danger">Excluir</button>
+                        </a>
+                    </td>
+                        </tr>';
+    }
+
 
     $resultados = !empty($resultados)? $resultados : '<tr> <td colspan="8" class="text-center">Nenhum Livro encontrado!</td> </tr>';
 ?>
