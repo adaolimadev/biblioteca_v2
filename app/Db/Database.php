@@ -44,6 +44,7 @@ class Database{
         try 
         {
             $statement = $this->connection->prepare($query);
+            Log::createLog('Query -> '.$query.' <-  a ser executada.','info');
             $statement->execute($params);
             Log::createLog('Query -> '.$query.' <- executada com sucesso!','info');
             return $statement; 
@@ -87,6 +88,30 @@ class Database{
             //Executa a query
             $st = $this->execute($query);
             $st->setFetchMode( PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, $this->entity );
+
+            Log::createLog('SELECT executada com sucesso!','info');
+            return $st;
+        } catch (PDOException $e) {
+            Log::createLog('Erro no select: '.$e->getMessage(),'error');
+            die('Erro inesperado, contate o Administrador do Sistema!');
+        }
+    }
+
+    //função para trazer Objetos (sem classe) de uma View do Banco de dados
+    public function selectView($where=null, $order=null, $limit=null, $fields='*')
+    {
+        try {
+            //Verifica se os parametros não são nulos
+            $where = !empty($where) ? 'WHERE '.$where : '';
+            $order = !empty($order) ? 'ORDER BY '.$order : '';
+            $limit = !empty($limit) ? 'LIMIT '.$limit : '';
+            
+            //Monta a query
+            $query = 'SELECT '.$fields.' FROM '.$this->table.' '.$where.' '.$order.' '.$limit;
+            
+            //Executa a query
+            $st = $this->execute($query);
+            $st->setFetchMode( PDO::FETCH_OBJ);
 
             Log::createLog('SELECT executada com sucesso!','info');
             return $st;

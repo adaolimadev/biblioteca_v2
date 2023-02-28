@@ -28,7 +28,7 @@ class ClienteDao extends Database
         return $this->select('id_cliente = '.$id)->fetchObject(self::class);
     }
 
-    public function atualizarCliente($id,CLiente $cliente){
+    public function atualizarCliente($id,Cliente $cliente){
         $valores = [
             'nome'    => $cliente->getNome(),
             'email'     => $cliente->getEmail(),

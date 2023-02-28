@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="list_emprestimo.php" role="button">
+                    <a class="nav-link " href="emprestimos.php" role="button">
                     Empréstimos
                     </a>
                 </li>
